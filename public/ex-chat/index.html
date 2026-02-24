@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat with Your Ex</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="screen active">
+            <div class="content-box">
+                <div class="emoji-animation">💔</div>
+                <h1 class="glitch" data-text="Ready to Talk?">Ready to Talk?</h1>
+                <p class="subtitle">Sometimes the hardest conversations are the most important ones.</p>
+                <button class="btn btn-primary" type="button" onclick="showWarning()">
+                    <i class="fas fa-comment-dots"></i>
+                    Continue
+                </button>
+            </div>
+        </div>
+
+        <!-- Warning Screen -->
+        <div id="warningScreen" class="screen">
+            <div class="content-box">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>Are You Sure?</h2>
+                <p class="warning-text">This action will open a chat with your ex. Make sure you're ready for this conversation.</p>
+
+                <div class="emotion-selector">
+                    <p class="label">How are you feeling?</p>
+                    <div class="emotions">
+                        <button class="emotion-btn" type="button" data-emotion="nervous" onclick="selectEmotion(this)">
+                            <span class="emoji">😰</span>
+                            <span class="text">Nervous</span>
+                        </button>
+                        <button class="emotion-btn" type="button" data-emotion="confident" onclick="selectEmotion(this)">
+                            <span class="emoji">😎</span>
+                            <span class="text">Confident</span>
+                        </button>
+                        <button class="emotion-btn" type="button" data-emotion="sad" onclick="selectEmotion(this)">
+                            <span class="emoji">😢</span>
+                            <span class="text">Sad</span>
+                        </button>
+                        <button class="emotion-btn" type="button" data-emotion="hopeful" onclick="selectEmotion(this)">
+                            <span class="emoji">🙏</span>
+                            <span class="text">Hopeful</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" type="button" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i>
+                        Go Back
+                    </button>
+                    <button class="btn btn-danger" type="button" onclick="showPhoneInput()" id="continueBtn" disabled>
+                        <i class="fas fa-heart-broken"></i>
+                        I'm Ready
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone Input Screen -->
+        <div id="phoneScreen" class="screen">
+            <div class="content-box">
+                <div class="phone-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <h2>Enter Ex's WhatsApp Number</h2>
+                <p class="info-text">We'll redirect you to WhatsApp</p>
+
+                <div class="phone-input-container">
+                    <div class="input-group">
+                        <select id="countryCode" class="country-code">
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+91" selected>🇮🇳 +91</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+7">🇷🇺 +7</option>
+                        </select>
+                        <input
+                            type="tel"
+                            id="phoneNumber"
+                            placeholder="Enter phone number"
+                            class="phone-input"
+                            maxlength="15"
+                            oninput="validatePhone()"
+                        />
+                    </div>
+                    <small class="hint">Enter number without spaces or special characters</small>
+                </div>
+
+                <div class="message-preview">
+                    <p class="label">Optional: Add a message</p>
+                    <textarea
+                        id="messageText"
+                        placeholder="Hey, can we talk?"
+                        class="message-input"
+                        maxlength="200"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/200
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" type="button" onclick="showWarning()">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-success" type="button" onclick="openWhatsApp()" id="chatBtn" disabled>
+                        <i class="fab fa-whatsapp"></i>
+                        Open WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="screen">
+            <div class="loader">
+                <div class="heart-loader">
+                    <div class="heart"></div>
+                </div>
+                <p class="loading-text">Preparing your chat...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio for effects (tiny click sound) -->
+    <audio id="clickSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS56+qhThAOT6fk77RgGwU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUhEOUKfj7bFeHAU7k9bx0IEuBSh+zPDajz0JGGm98OeiTxEOVKzn77ZiHAU+ldTxzoYxBSt9y+/bkUELF2S76eykUg==" type="audio/wav" />
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
