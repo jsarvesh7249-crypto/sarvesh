@@ -1,0 +1,9 @@
+feedparser
+numpy
+requests
+yfinance
+beautifulsoup4
+gTTS
+Pillow
+moviepy
+imageio-ffmpeg
