@@ -46,7 +46,7 @@ body {
 
 .big-text {
     font-size: 80px;
-    color: #fff;
+    color: #ff6b6b;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
     animation: fadeIn 0.5s ease-in;
     margin-top: 50px;
